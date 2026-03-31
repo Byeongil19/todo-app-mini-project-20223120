@@ -5,14 +5,21 @@ function App() {
   const [todos, setTodos] = useState([]);
   const [input, setInput] = useState('');
 
-  // 1. 할 일 목록 불러오기 (GET)
+  // 목록 가져오기
   useEffect(() => {
-    axios.get('http://localhost:5000/api/todos')
-      .then(res => setTodos(res.data))
-      .catch(err => console.log(err));
+    fetchTodos();
   }, []);
 
-  // 2. 새로운 할 일 추가 (POST)
+  const fetchTodos = async () => {
+    try {
+      const res = await axios.get('http://localhost:5000/api/todos');
+      setTodos(res.data);
+    } catch (err) {
+      console.error("불러오기 실패:", err);
+    }
+  };
+
+  // 할 일 추가
   const addTodo = async () => {
     if (!input) return;
     try {
@@ -24,7 +31,7 @@ function App() {
     }
   };
 
-  // 3. 완료 체크 상태 변경 (PUT)
+  // 체크박스 변경
   const toggleTodo = async (id, completed) => {
     try {
       const res = await axios.put(`http://localhost:5000/api/todos/${id}`, { completed: !completed });
@@ -34,7 +41,7 @@ function App() {
     }
   };
 
-  // 4. 할 일 삭제 (DELETE)
+  // 삭제
   const deleteTodo = async (id) => {
     try {
       await axios.delete(`http://localhost:5000/api/todos/${id}`);
@@ -46,7 +53,7 @@ function App() {
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center p-10">
-      <h1 className="text-4xl font-bold mb-8 text-blue-600">My Todo List</h1>
+      <h1 className="text-4xl font-bold mb-8 text-blue-600">창원대 Todo 리스트</h1>
       
       <div className="flex gap-2 mb-6">
         <input 
@@ -54,13 +61,9 @@ function App() {
           value={input} 
           onChange={(e) => setInput(e.target.value)}
           placeholder="할 일을 입력하세요"
+          onKeyPress={(e) => e.key === 'Enter' && addTodo()}
         />
-        <button 
-          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 font-bold" 
-          onClick={addTodo}
-        >
-          추가
-        </button>
+        <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 font-bold" onClick={addTodo}>추가</button>
       </div>
 
       <ul className="w-full max-w-md">
@@ -73,16 +76,9 @@ function App() {
                 checked={todo.completed} 
                 onChange={() => toggleTodo(todo._id, todo.completed)}
               />
-              <span className={todo.completed ? "line-through text-gray-400" : "font-medium"}>
-                {todo.title}
-              </span>
+              <span className={todo.completed ? "line-through text-gray-400" : "font-medium"}>{todo.title}</span>
             </div>
-            <button 
-              className="text-red-500 hover:text-red-700 font-bold" 
-              onClick={() => deleteTodo(todo._id)}
-            >
-              삭제
-            </button>
+            <button className="text-red-500 hover:text-red-700 font-bold" onClick={() => deleteTodo(todo._id)}>삭제</button>
           </li>
         ))}
       </ul>
