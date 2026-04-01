@@ -298,7 +298,7 @@ function App() {
 
   const fetchTodos = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/todos');
+      const res = await axios.get('https://todo-app-mini-project-20223120.vercel.app/api/todos');
       setTodos(res.data);
     } catch (err) { console.error("불러오기 실패:", err); }
   };
@@ -306,7 +306,7 @@ function App() {
   const addTodo = async () => {
     if (!input.trim()) return;
     try {
-      const res = await axios.post('http://localhost:5000/api/todos', { title: input, date: selectedDate });
+      const res = await axios.post('https://todo-app-mini-project-20223120.vercel.app/api/todos', { title: input, date: selectedDate });
       setTodos([...todos, res.data]);
       setInput('');
     } catch (err) { console.error("추가 실패:", err); }
