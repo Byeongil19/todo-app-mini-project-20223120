@@ -314,14 +314,14 @@ function App() {
 
   const toggleTodo = async (id, completed) => {
     try {
-      const res = await axios.put(`http://localhost:5000/api/todos/${id}`, { completed: !completed });
+      const res = await axios.put(`https://todo-app-mini-project-20223120.vercel.app/api/todos/${id}`, { completed: !completed });
       setTodos(todos.map(t => (t._id === id ? res.data : t)));
     } catch (err) { console.error("수정 실패:", err); }
   };
 
   const deleteTodo = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/api/todos/${id}`);
+      await axios.delete(`https://todo-app-mini-project-20223120.vercel.app/api/todos/${id}`);
       setTodos(todos.filter(t => t._id !== id));
     } catch (err) { console.error("삭제 실패:", err); }
   };
@@ -334,7 +334,7 @@ function App() {
   const submitEdit = async (id) => {
     if (!editText.trim()) return;
     try {
-      const res = await axios.put(`http://localhost:5000/api/todos/${id}`, { title: editText });
+      const res = await axios.put(`https://todo-app-mini-project-20223120.vercel.app/api/todos/${id}`, { title: editText });
       setTodos(todos.map(t => (t._id === id ? res.data : t)));
       setEditingId(null);
     } catch (err) { console.error("수정 실패:", err); }
