@@ -10,7 +10,7 @@ app.use(cors());
 app.use(express.json());
 
 // MongoDB 연결 주소
-const MONGODB_URI = "mongodb://bbaengil:1111@ac-m79xnv4-shard-00-00.zqxxxij.mongodb.net:27017,ac-m79xnv4-shard-00-01.zqxxxij.mongodb.net:27017,ac-m79xnv4-shard-00-02.zqxxxij.mongodb.net:27017/?ssl=true&replicaSet=atlas-iinb3h-shard-0&authSource=admin&appName=Cluster0";
+const MONGODB_URI = process.env.MONGODB_URI;
 
 mongoose.connect(MONGODB_URI)
   .then(() => console.log('✅ MongoDB 연결 성공!!!'))
@@ -55,7 +55,7 @@ app.put('/api/todos/:id', async (req, res) => {
   try {
     const updatedTodo = await Todo.findByIdAndUpdate(
       req.params.id,
-      { completed: req.body.completed },
+      { $set: req.body },
       { new: true }
     );
     res.json(updatedTodo);
